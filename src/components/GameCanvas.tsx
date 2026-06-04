@@ -15,7 +15,14 @@ export default function GameCanvas() {
 
         const game = new Game(ctx);
 
-        game.draw();
+        const gameLoop = () => {
+            game.update();
+            game.draw();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
     }, []);
 
     return (
