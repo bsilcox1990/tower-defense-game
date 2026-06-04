@@ -24,6 +24,10 @@ export class Game {
     }
 
     update() {
+        this.towers.forEach(tower => {
+            tower.update(this.enemies);
+        });
+
         this.enemies.forEach(enemy => enemy.update());
 
         this.enemies = this.enemies.filter(enemy => {
@@ -73,7 +77,7 @@ export class Game {
         if(overlap){
             return;
         }
-        
+
         if(this.isOnPath(x, y)){
             return;
         }
