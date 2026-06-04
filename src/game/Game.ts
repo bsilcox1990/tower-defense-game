@@ -1,21 +1,37 @@
 import { Enemy } from "./Enemy";
+import { Tower } from "./Tower";
 
 export class Game {
     private ctx: CanvasRenderingContext2D;
 
-    private enemy: Enemy;
+    private enemies: Enemy[] = [];
+    private towers: Tower[] = [];
 
     constructor(ctx: CanvasRenderingContext2D) {
         this.ctx = ctx;
 
-        this.enemy = new Enemy();
+        this.enemies.push(new Enemy());
+    }
+
+    isOnPath(x: number, y: number): boolean {
+        return (
+            (x >= 0 && x <= 250 && y >= 250 && y <= 310) ||
+            (x >= 250 && x <= 310 && y >= 250 && y <= 400) ||
+            (x >= 250 && x <= 550 && y >= 340 && y <= 400) ||
+            (x >= 550 && x <= 610 && y >= 100 && y <= 400) ||
+            (x >= 550 && x <= 750 && y >= 100 && y <= 160)
+        );
     }
 
     update() {
-        this.enemy.update();
+        this.enemies.forEach(enemy => enemy.update());
 
-        if(this.enemy.hasReachedEnd()){
-            this.enemy = new Enemy();
+        this.enemies = this.enemies.filter(enemy => {
+            return !enemy.hasReachedEnd();
+        });
+
+        if(this.enemies.length === 0){
+            this.enemies.push(new Enemy());
         }
     }
 
@@ -33,6 +49,35 @@ export class Game {
         this.ctx.fillRect(550, 100, 60, 300);
         this.ctx.fillRect(550, 100, 200, 60);
 
-        this.enemy.draw(this.ctx);
+        this.enemies.forEach(enemy => {
+            enemy.draw(this.ctx);
+        });
+
+        this.towers.forEach(tower => {
+            tower.draw(this.ctx);
+        })
+    }
+
+    addTower(x: number, y: number){
+        const towerSize = 30;
+
+        const overlap = this.towers.some(tower => {
+            const dx = tower.x - x;
+            const dy = tower.y - y;
+
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            return distance < towerSize;
+        });
+        
+        if(overlap){
+            return;
+        }
+        
+        if(this.isOnPath(x, y)){
+            return;
+        }
+
+        this.towers.push(new Tower(x, y));
     }
 }
