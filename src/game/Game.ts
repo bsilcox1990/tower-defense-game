@@ -66,18 +66,18 @@ export class Game {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, 800, 600);
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
         this.ctx.fillStyle = "#1e1e1e";
-        this.ctx.fillRect(0, 0, 800, 600);
+        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
         this.ctx.fillStyle = "#a88b5c";
 
-        this.ctx.fillRect(0, 250, 250, 60);
-        this.ctx.fillRect(250, 250, 60, 150);
-        this.ctx.fillRect(250, 340, 300, 60);
-        this.ctx.fillRect(550, 100, 60, 300);
-        this.ctx.fillRect(550, 100, 200, 60);
+        this.ctx.fillRect(0, 450, 700, 80);
+        this.ctx.fillRect(620, 450, 80, 250);
+        this.ctx.fillRect(620, 620, 800, 80);
+        this.ctx.fillRect(1340, 150, 80, 550);
+        this.ctx.fillRect(1340, 150, 500, 80);
 
         this.enemies.forEach(enemy => {
             enemy.draw(this.ctx);
