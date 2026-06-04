@@ -1,13 +1,21 @@
 import { useState } from 'react'
+import GameCanvas from './components/GameCanvas'
 import './App.css'
 
 function App() {
   
 
   return (
-    <>
-      <h1>NEW APPLICATION</h1>
-    </>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        marginTop: "2rem",
+      }}
+    
+    >
+      <GameCanvas />
+    </div>
   )
 }
 
