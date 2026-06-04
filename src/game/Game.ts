@@ -1,11 +1,13 @@
 import { Enemy } from "./Enemy";
 import { Tower } from "./Tower";
+import { Projectile } from "./Projectile";
 
 export class Game {
     private ctx: CanvasRenderingContext2D;
 
     private enemies: Enemy[] = [];
     private towers: Tower[] = [];
+    private projectiles: Projectile[] = [];
 
     constructor(ctx: CanvasRenderingContext2D) {
         this.ctx = ctx;
@@ -26,9 +28,25 @@ export class Game {
     update() {
         this.towers.forEach(tower => {
             tower.update(this.enemies);
+
+            if(tower.canShoot()) {
+                this.projectiles.push(
+                    new Projectile(
+                        tower.x,
+                        tower.y,
+                        tower.target!,
+                    )
+                );
+
+                tower.resetCooldown();
+            }
         });
 
         this.enemies.forEach(enemy => enemy.update());
+
+        this.enemies = this.enemies.filter(
+            enemy => enemy.health > 0
+        );
 
         this.enemies = this.enemies.filter(enemy => {
             return !enemy.hasReachedEnd();
@@ -37,6 +55,14 @@ export class Game {
         if(this.enemies.length === 0){
             this.enemies.push(new Enemy());
         }
+
+        this.projectiles.forEach(projectile => {
+            projectile.update();
+        });
+
+        this.projectiles = this.projectiles.filter(
+            projectile => !projectile.isDestroyed
+        )
     }
 
     draw() {
@@ -59,6 +85,10 @@ export class Game {
 
         this.towers.forEach(tower => {
             tower.draw(this.ctx);
+        });
+
+        this.projectiles.forEach(projectile => {
+            projectile.draw(this.ctx);
         })
     }
 

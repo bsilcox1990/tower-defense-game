@@ -5,6 +5,8 @@ export class Tower {
     y: number;
     range = 125;
     target: Enemy | null = null;
+    cooldown = 0;
+    fireRate = 60;
 
     constructor(x: number, y: number){
         this.x = x;
@@ -13,6 +15,18 @@ export class Tower {
 
     update(enemies: Enemy[]){
         this.target = this.getTarget(enemies);
+
+        if(this.cooldown > 0) {
+            this.cooldown--;
+        }
+    }
+
+    canShoot() {
+        return this.target && this.cooldown === 0;
+    }
+
+    resetCooldown() {
+        this.cooldown = this.fireRate;
     }
 
     getTarget(enemies: Enemy[]){

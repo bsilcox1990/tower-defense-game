@@ -5,7 +5,8 @@ export class Enemy {
     y: number;
 
     speed = 1.5;
-
+    health = 100;
+    maxHealth = 100;
     waypointIndex = 1;
 
     constructor() {
@@ -40,6 +41,22 @@ export class Enemy {
         ctx.beginPath();
         ctx.arc(this.x, this.y, 15, 0, Math.PI * 2);
         ctx.fill();
+
+        ctx.fillStyle = "red";
+        ctx.fillRect(
+            this.x - 15,
+            this.y - 25,
+            30,
+            4
+        );
+
+        ctx.fillStyle = "lime";
+        ctx.fillRect(
+            this.x - 15,
+            this.y - 25,
+            (this.health / this.maxHealth) * 30,
+            4
+        )
     }
 
     hasReachedEnd() {
